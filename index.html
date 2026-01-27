@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Finança</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body>
-    <div class="container-menu">
-        <div id="menu">
-            <div id="menu-bar" onclick="menuOnClick()">
-                <div id="bar1" class="bar"></div>
-                <div id="bar2" class="bar"></div>
-                <div id="bar3" class="bar"></div>
+    <div class="container">
+        <div class="container-menu">
+            <div id="menu">
+                <div id="menu-bar" onclick="menuOnClick()">
+                    <div id="bar1" class="bar"></div>
+                    <div id="bar2" class="bar"></div>
+                    <div id="bar3" class="bar"></div>
+                </div>
+                <nav class="nav" id="nav">
+                    <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Blog</a></li>
+                    </ul>
+                </nav> 
             </div>
-            <nav class="nav" id="nav">
-                <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Blog</a></li>
-                </ul>
-            </nav> 
+
+            <div class="pesquisa">
+                <input type="text" placeholder="Pesquisar...">
+                <button><i class="bi bi-search"></i></button>
+            </div>
+
+            <div class="perfil">
+                <i class="bi bi-person-circle" id="icon-perfil"></i>
+            </div>
         </div>
 
-        <div class="pesquisa">
-            <input type="text" placeholder="Pesquisar...">
-            <button><i class="bi bi-search"></i></button>
+        <div class="acoes">
+            <button><i class="bi bi-house-door"></i> Home</button>
+            <button><i class="bi bi-pie-chart"></i> Gráfico</button>
+            <button><i class="bi bi-pencil-square"></i> Editar</button>
         </div>
 
-        <div class="perfil">
-            <i class="bi bi-person-circle" id="icon-perfil"></i>
-        </div>
-    </div>
-
-    <div class="acoes">
-        <button><i class="bi bi-house-door"></i> Home</button>
-        <button><i class="bi bi-pie-chart"></i> Gráfico</button>
-        <button><i class="bi bi-pencil-square"></i> Editar</button>
-    </div>
-
-    <div class="valor-inicial">
-        
+        <div class="valor-inicial"></div>
     </div>
     <script src="script.js"></script>
 </body>

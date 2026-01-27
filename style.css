@@ -1,13 +1,10 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-body{
-    background-color: #414141;
-    width:360px;
-    height: 100vh;
-    margin: 0 auto;
+html, body {
+  margin: 0;
+  padding: 0;
+  width:360px;
+  overflow: hidden;
+  margin: 0 auto;
+  background-color: #414141;
 }
 .container-menu{
     display: flex;
@@ -169,7 +166,7 @@ body{
 }
 
 .change #bar3 {
-  transform: translateY(-6px) rotateZ(45deg);
+  transform: translateY(-3px) rotateZ(37deg);
 }
 
 .change-bg {
