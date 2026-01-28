@@ -1,0 +1,30 @@
+[
+  {
+    "tipo": "inicial",
+    "titulo": "Valor Inicial",
+    "valor": 5000,
+    "historico": [
+      "Depósito inicial: R$ 5.000",
+      "Ajuste manual: R$ 4.800",
+      "Correção: R$ 5.000"
+    ]
+  },
+  {
+    "tipo": "atual",
+    "titulo": "Valor Atual",
+    "valor": 5200,
+    "historico": [
+      "Rendimento: R$ 200",
+      "Correção: R$ 5.200",
+      "pagamento: R$ 100,00"
+    ]
+  },
+  {
+    "tipo": "retirado",
+    "titulo": "Valor Retirado",
+    "valor": 1000,
+    "historico": [
+      "Saque: R$ 1.000"
+    ]
+  }
+]

@@ -198,11 +198,11 @@ html, body {
 }
 
 .historico {
-  padding: 15px;
   color: white;
   max-height: 230px;
   overflow-y: auto;
   display: none;
+  margin-left: 32px;
 
   scrollbar-width: none; 
   -ms-overflow-style: none; 
@@ -235,6 +235,22 @@ html, body {
 }
 .titulo.inicial{
   color: rgb(30, 255, 0);
+}
+
+.catraca.atual{
+  color: rgb(251, 255, 3);
+  font-size: 18px;
+}
+.titulo.atual{
+    color: rgb(251, 255, 3);
+}
+
+.catraca.retirado{
+  color: rgb(255, 3, 3);
+  font-size: 18px;
+}
+.titulo.retirado{
+    color: rgb(255, 3, 3);
 }
 
 .catraca i {
