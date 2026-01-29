@@ -1,35 +1,36 @@
 // Pure JS
-// A ideia aqui é que essas funcoes possam adicionar, remover e atualizar valores, hoje está fazendo apenas o append no histórico.
-function updateValorHistoricoInicial(caminho, tipo, novoConteudo) {
+function updateValorJson(caminho, tipo, operacao, novoConteudo) {
   const fs = require('fs');
   const data = fs.readFileSync(caminho, 'utf8');
   const json = JSON.parse(data);
-  // json[0] = inicial, json[1] = atual, ...
-  json[0].historico.push(novoConteudo);
+
+  const indice = tipo === 'inicial' ? 0 : tipo === 'atual' ? 1 : tipo === 'retirado' ? 2 : -1;
+  if (indice === -1) {
+    console.error('Tipo inválido fornecido.');
+    return;
+  }
+
+  if (operacao === 'add') {
+    json[indice].historico.push(novoConteudo);
+  } else if (operacao === 'remove') {
+    json[indice].historico.splice(0, 1)
+  } else if (operacao === 'update') {
+    json[indice].historico = novoConteudo;
+  } else {
+    console.error('Operação inválida fornecida.');
+    return;
+  }
+
   fs.writeFileSync(caminho, JSON.stringify(json, null, 2), 'utf8');
 }
 
-function updateValorHistoricoAtual(caminho, tipo, novoConteudo) {
-  const fs = require('fs');
-  const data = fs.readFileSync(caminho, 'utf8');
-  const json = JSON.parse(data);
-  // json[0] = inicial, json[1] = atual, ...
-  json[1].historico.push(novoConteudo);
-  fs.writeFileSync(caminho, JSON.stringify(json, null, 2), 'utf8');
-}
+// Exemplo de uso add
+updateValorJson('dados.json', 'inicial', 'add', 'Nova receita adicionada em ' + new Date().toLocaleDateString());
 
-function updateValorHistoricoRetirado(caminho, tipo, novoConteudo) {
-  const fs = require('fs');
-  const data = fs.readFileSync(caminho, 'utf8');
-  const json = JSON.parse(data);
-  // json[0] = inicial, json[1] = atual, ...
-  json[2].historico.push(novoConteudo);
-  fs.writeFileSync(caminho, JSON.stringify(json, null, 2), 'utf8');
-}
+// Exemplo de uso remove
+updateValorJson('dados.json', 'inicial', 'remove', 'Despesa paga em ' + new Date().toLocaleDateString());
 
-// Exemplo de uso
-updateValorHistoricoInicial('dados.json', 'add', 'Nova receita adicionada em ' + new Date().toLocaleDateString());
+// Exemplo de uso update
+updateValorJson('dados.json', 'retirado', 'update', { old: 'Valor retirado em 01/01/2024', new: 'Valor retirado em ' + new Date().toLocaleDateString() });
+updateValorJson('dados.json', 'atual', 'update', { old: 'Valor retirado em 01/01/2024', new: 'Valor atualizado em ' + new Date().toLocaleDateString() });
 
-updateValorHistoricoAtual('dados.json', 'add', 'Despesa paga em ' + new Date().toLocaleDateString());
-
-updateValorHistoricoRetirado('dados.json', 'add', 'Valor retirado em ' + new Date().toLocaleDateString());
