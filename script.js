@@ -28,7 +28,7 @@ function criarValorBox(dado) {
     <div class="historico">
       ${dado.historico.map(item => `
         <div class="historico-item">
-          <p>• ${item}</p>
+          <p><span class="ponto_paragrafo atual">•</span> ${item}</p>
           <div class="acoes">
             <button><i class="bi bi-pencil-square"></i></button>
             <button><i class="bi bi-trash3-fill"></i></button>

@@ -276,3 +276,13 @@ html, body {
   display: flex;
   gap: 8px;
 }
+.ponto_paragrafo.atual{
+  color: green;
+}
+.grafico{
+  width: 100%;
+  height: 300px;
+  background-color: #000000;
+  margin-top: 15px;
+  border-radius: 8px;
+}
