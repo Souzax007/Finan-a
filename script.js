@@ -56,6 +56,7 @@ fetch('dados.json')
     dados.forEach(dado => {
       container.appendChild(criarValorBox(dado));
     });
+     atualizarGrafico(dados);
   })
   .catch(err => console.error('Erro ao carregar JSON:', err));
 
@@ -70,4 +71,84 @@ fetch('dados.json')
 
     return total + (isNaN(valorNumero) ? 0 : valorNumero);
   }, 0);
+}
+
+let grafico;
+
+function atualizarGrafico(dados) {
+  const inicial = dados.find(d => d.tipo === 'inicial');
+  const atual = dados.find(d => d.tipo === 'atual');
+
+  const totalInicial = calcularTotalHistorico(inicial?.historico || []);
+  const totalAtual = calcularTotalHistorico(atual?.historico || []);
+
+  if (totalInicial === 0) return;
+
+  const ratio = totalAtual / totalInicial;
+  const percentual = Math.min(Math.round(ratio * 100), 100);
+
+  let cor = '#2ecc71'; 
+  let status = 'Saudável';
+
+  if (ratio < 0.5) {
+    cor = '#e74c3c'; 
+    status = 'Crítico';
+  } else if (ratio < 0.9) {
+    cor = '#f1c40f'; 
+    status = 'Atenção';
+  }
+
+  const options = {
+    chart: {
+      type: 'radialBar',
+      height: 280,
+      sparkline: { enabled: true }
+    },
+    series: [percentual],
+    colors: [cor],
+    labels: ['Situação Financeira'],
+    plotOptions: {
+      radialBar: {
+        startAngle: -90,
+        endAngle: 90,
+        hollow: {
+          size: '65%'
+        },
+        track: {
+          background: '#2c2c2c'
+        },
+        dataLabels: {
+          name: {
+            offsetY: -10,
+            color: '#fff',
+            fontSize: '14px'
+          },
+          value: {
+            formatter: () => formatarMoeda(totalAtual),
+            color: '#fff',
+            fontSize: '18px',
+            offsetY: 10
+          }
+        }
+      }
+    },
+    subtitle: {
+      text: status,
+      align: 'center',
+      style: {
+        color: cor,
+        fontSize: '14px'
+      }
+    }
+  };
+
+  if (!grafico) {
+    grafico = new ApexCharts(
+      document.querySelector("#graficoFinanceiro"),
+      options
+    );
+    grafico.render();
+  } else {
+    grafico.updateOptions(options);
+  }
 }

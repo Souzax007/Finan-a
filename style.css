@@ -286,3 +286,35 @@ html, body {
   margin-top: 15px;
   border-radius: 8px;
 }
+/*gráfico*/
+
+.gauge {
+  width: 100%;
+}
+
+.gauge path {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+}
+
+#arc-retirado { stroke: #e74c3c; }
+#arc-inicial { stroke: #f1c40f; }
+#arc-atual { stroke: #2ecc71; }
+
+#ponteiro {
+  stroke: #333;
+  stroke-width: 3;
+  transform-origin: 100px 100px;
+  transition: transform 0.6s ease;
+}
+
+.grafico circle {
+  fill: #333;
+}
+
+.valor-atual {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 8px;
+}
