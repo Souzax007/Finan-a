@@ -264,8 +264,8 @@ html, body {
 
 .historico-item {
   display: flex;
-  justify-content: space-between; /* texto à esquerda, botões à direita */
-  align-items: center;            /* alinha verticalmente */
+  justify-content: space-between; 
+  align-items: center;            
 }
 
 .historico-item p {
@@ -274,5 +274,5 @@ html, body {
 
 .acoes {
   display: flex;
-  gap: 8px; /* espaço entre os botões */
+  gap: 8px;
 }

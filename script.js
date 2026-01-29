@@ -14,7 +14,6 @@ function criarValorBox(dado) {
   const box = document.createElement('div');
   box.classList.add('valor-box', `valor-${dado.tipo}`);
 
-  //  calcula o total baseado no histórico
   const totalCalculado = calcularTotalHistorico(dado.historico);
 
   box.innerHTML = `
@@ -62,10 +61,9 @@ fetch('dados.json')
 
   function calcularTotalHistorico(historico) {
   return historico.reduce((total, item) => {
-    // Remove tudo que não for número, vírgula ou sinal de menos
+  
     let valorTexto = item.replace(/[^\d,-]/g, '');
 
-    // Converte formato brasileiro para número
     let valorNumero = Number(
       valorTexto.replace('.', '').replace(',', '.')
     );
