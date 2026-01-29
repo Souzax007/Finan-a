@@ -1,4 +1,5 @@
 // Pure JS
+// A ideia aqui é que essas funcoes possam adicionar, remover e atualizar valores, hoje está fazendo apenas o append no histórico.
 function updateValorHistoricoInicial(caminho, tipo, novoConteudo) {
   const fs = require('fs');
   const data = fs.readFileSync(caminho, 'utf8');
@@ -27,8 +28,8 @@ function updateValorHistoricoRetirado(caminho, tipo, novoConteudo) {
 }
 
 // Exemplo de uso
-updateValorHistoricoInicial('dados.json', 'inicial', 'Nova receita adicionada em ' + new Date().toLocaleDateString());
+updateValorHistoricoInicial('dados.json', 'add', 'Nova receita adicionada em ' + new Date().toLocaleDateString());
 
-updateValorHistoricoAtual('dados.json', 'atual', 'Despesa paga em ' + new Date().toLocaleDateString());
+updateValorHistoricoAtual('dados.json', 'add', 'Despesa paga em ' + new Date().toLocaleDateString());
 
-updateValorHistoricoRetirado('dados.json', 'retirado', 'Valor retirado em ' + new Date().toLocaleDateString());
+updateValorHistoricoRetirado('dados.json', 'add', 'Valor retirado em ' + new Date().toLocaleDateString());
