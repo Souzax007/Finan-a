@@ -118,8 +118,27 @@ html, body {
 }
 
 .nav {
-  transition: 0.3s ease;
-  display: none;
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  background-color: black;
+  border-radius: 12px;
+  width: 220px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(-10px);
+  z-index: 1000;
+}
+
+.nav.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .nav ul {
@@ -317,4 +336,17 @@ html, body {
   text-align: center;
   font-weight: bold;
   margin-top: 8px;
+}
+
+/* Cor do ponto */
+.ponto_paragrafo.inicial {
+  color: #2ecc71;
+}
+
+.ponto_paragrafo.atual {
+  color: #f1c40f;
+}
+
+.ponto_paragrafo.retirado {
+  color: #e74c3c;
 }
