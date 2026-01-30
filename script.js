@@ -22,13 +22,13 @@ function fecharMenuAoClicarFora(e) {
   }
 }
 
-
 function formatarMoeda(valor) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 function converterTextoParaNumero(texto) {
-  return Number(texto.replace(/[^\d,-]/g, "").replace(".", "").replace(",", "."));
+  const numerosApenas = texto.replace(/\D/g, ""); 
+  return numerosApenas ? Number(numerosApenas) : 0;
 }
 
 function calcularTotalHistorico(historico) {
@@ -134,10 +134,12 @@ function criarValorBox(dado, indexDado) {
       const item = dados[indexDado].historico[indexItem];
 
       const novaDescricao = prompt("Editar descrição:", item.descricao);
-      if (novaDescricao === null) return; // usuário cancelou
+      if (novaDescricao === null) return;
 
-      const novoValor = prompt("Editar valor:", item.valor);
-      if (novoValor === null) return; // usuário cancelou
+      let novoValor = prompt("Editar valor (somente números):", item.valor);
+      if (novoValor === null) return;
+
+      novoValor = novoValor.replace(/\D/g, "");
 
       dados[indexDado].historico[indexItem] = { descricao: novaDescricao, valor: novoValor };
       salvarDados(dados);
@@ -147,8 +149,6 @@ function criarValorBox(dado, indexDado) {
 
   return box;
 }
-
-
 
 function criarBoxValorAtual(dados) {
   const entradas = (dados.find(d => d.tipo === "inicial")?.historico || []);
@@ -204,9 +204,9 @@ function atualizarGrafico(dados) {
   const options = {
     chart: { 
       type: "radialBar", 
-      height: 300, 
+      height: 400, 
       sparkline: { enabled: true },
-      animations: { enabled: true, easing: 'easeinout', speed: 1000 }
+      animations: { enabled: true, easing: 'easeinout', speed: 1500 }
     },
     series: [percentual],
     colors: [cor],
@@ -214,15 +214,17 @@ function atualizarGrafico(dados) {
       radialBar: {
         startAngle: -90,
         endAngle: 90,
-        hollow: { size: "60%" },
-        track: { background: "#2c2c2c" },
+        hollow: { size: "70%" },
+        track: { background: "#ffffff" },
         dataLabels: {
           name: { show: false },
           value: { 
             formatter: () => formatarMoeda(totalAtual), 
-            color: "#fff", 
-            fontSize: "22px", 
-            fontWeight: "bold"
+            color: "#fcfbfb", 
+            fontSize: "50px", 
+            fontWeight: "bold",
+            offsetY: -40,
+            offsetX: 0
           },
           total: {
             show: true,
@@ -234,9 +236,7 @@ function atualizarGrafico(dados) {
         }
       }
     },
-    stroke: {
-      lineCap: 'round'
-    },
+    stroke: { lineCap: 'round' },
     fill: {
       type: 'gradient',
       gradient: {
@@ -261,7 +261,6 @@ function atualizarGrafico(dados) {
   }
 }
 
-
 function renderizar(dados) {
   const container = document.getElementById("valorContainer");
   const graficoContainer = document.querySelector(".grafico");
@@ -282,6 +281,17 @@ function renderizar(dados) {
   atualizarGrafico(dados);
 }
 
+function aplicarMascaraMoeda(input) {
+  input.addEventListener("input", (e) => {
+    let valor = e.target.value.replace(/\D/g, ""); 
+    valor = (valor / 100).toFixed(2); 
+    valor = valor.toString().replace(".", ","); 
+
+    valor = valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    e.target.value = valor;
+  });
+}
+
 function inicializarRegistro() {
   const btnRegistrar = document.getElementById("btnRegistrar");
   const formContainer = document.getElementById("formRegistroContainer");
@@ -289,6 +299,9 @@ function inicializarRegistro() {
   const valorContainer = document.getElementById("valorContainer");
   const graficoContainer = document.querySelector(".grafico");
   const btnCancelar = document.getElementById("cancelarRegistro");
+  const inputValor = document.getElementById("valor");
+
+  aplicarMascaraMoeda(inputValor); 
 
   btnRegistrar.addEventListener("click", () => {
     formContainer.style.display = "block";
@@ -307,7 +320,9 @@ function inicializarRegistro() {
     const dados = obterDadosStorage();
     const tipo = document.getElementById("tipo").value;
     const descricao = document.getElementById("descricao").value;
-    const valor = document.getElementById("valor").value;
+    let valor = document.getElementById("valor").value;
+
+    valor = valor.replace(/\D/g, ""); 
 
     const indice = dados.findIndex(d => d.tipo === tipo);
     if (indice !== -1) dados[indice].historico.push({ descricao, valor });

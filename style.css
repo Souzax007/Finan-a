@@ -365,15 +365,12 @@ html, body {
 }
 
 #formRegistroContainer {
-    position: relative;
-    top: 16px;
-    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    margin-top: 10px;
 }
 
 #formRegistro {
@@ -460,3 +457,9 @@ html, body {
     font-size: 20px;
   }
 }
+
+
+.apexcharts-datalabel-value {
+  transform: translate(0, 0);
+}
+
