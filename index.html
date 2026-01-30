@@ -62,11 +62,7 @@
   <div class="acoes">
     <button><i class="bi bi-house-door"></i> Home</button>
     <button><i class="bi bi-pie-chart"></i> Gráfico</button>
-    <button><i class="bi bi-pencil-square"></i> Editar</button>
-
-
-   
-
+    <button id="btnRegistrar"><i class="bi bi-pencil-square"></i> Registrar</button>
   </div>
 
   <div class="container" id="valorContainer"></div>
@@ -74,6 +70,28 @@
   <div class="grafico">
     <div id="graficoFinanceiro"></div>
   </div>
+
+  <div id="formRegistroContainer" style="display: none;">
+    <form id="formRegistro">
+      <h2>Registrar Novo Valor</h2>
+
+      <label for="tipo">Tipo:</label>
+      <select id="tipo" required>
+        <option value="inicial">Inicial</option>
+        <option value="retirado">Retirado</option>
+      </select>
+
+      <label for="titulo">Título:</label>
+      <input type="text" id="titulo" required>
+
+      <label for="valor">Valor:</label>
+      <input type="text" id="valor" required placeholder="R$ 0,00">
+
+      <button type="submit">Salvar</button>
+      <button type="button" id="cancelarRegistro">Cancelar</button>
+    </form>
+  </div>
+
 
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
