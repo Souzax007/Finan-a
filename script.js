@@ -1,8 +1,27 @@
-function menuOnClick() {
+function menuOnClick(event) {
+  event.stopPropagation();
+
   document.getElementById("nav").classList.toggle("active");
   toggleClasse("menu-bar", "change");
   toggleClasse("nav", "change");
 }
+
+function fecharMenuAoClicarFora(e) {
+  const menu = document.getElementById('nav');
+  const menuBar = document.getElementById('menu-bar');
+
+  if (!menu.classList.contains('active')) return;
+
+  const clicouNoMenu = menu.contains(e.target);
+  const clicouNoBotao = menuBar.contains(e.target);
+
+  if (!clicouNoMenu && !clicouNoBotao) {
+    menu.classList.remove('active');
+    menu.classList.remove('change');
+    menuBar.classList.remove('change');
+  }
+}
+
 
 function toggleClasse(id, classe) {
   document.getElementById(id).classList.toggle(classe);
@@ -136,10 +155,17 @@ function excluirItem(botao) {
   const dados = obterDadosStorage();
   const { dado, item } = botao.dataset;
 
+  const valorExcluido = dados[dado].historico[item];
+
+  if (!confirm(`Tem certeza que deseja excluir este valor ${valorExcluido}?`)) return;
+
   dados[dado].historico.splice(item, 1);
   salvarDados(dados);
   renderizar(dados);
+
+  alert(`Valor excluído: ${valorExcluido}`);
 }
+
 
 function editarItem(botao) {
   const dados = obterDadosStorage();
@@ -223,5 +249,5 @@ function criarOpcoesGrafico(percentual, totalAtual, cor, status) {
   };
 }
 
-
+document.addEventListener('click', fecharMenuAoClicarFora);
 obterDados().then(renderizar);
