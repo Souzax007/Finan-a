@@ -95,19 +95,60 @@ function criarValorBox(dado, indexDado) {
     <div class="historico">
       ${dado.historico.map((item, i) => `
         <div class="historico-item ${dado.tipo}">
-          <p>${item.descricao}: ${formatarMoeda(converterTextoParaNumero(item.valor))}</p>
+            <div class="historico-descricao">
+              <p>${item.descricao}:</p>
+            </div>
+
+            <div class="historico-valor">
+              <p> ${formatarMoeda(converterTextoParaNumero(item.valor))}</p>
+            </div>
+            
+            <div class="historico-acoes ${dado.tipo}">
+              <button class="editar-item" data-index="${i}"><i class="bi bi-pencil-square"></i></button>
+              <button class="remover-item" data-index="${i}"><i class="bi bi-trash3-fill"></i></button>
+            </div>
         </div>
       `).join("")}
     </div>
   `;
 
   const btnCatraca = box.querySelector(".catraca");
-  btnCatraca.addEventListener("click", () => {
-    box.classList.toggle("aberto");
+  btnCatraca.addEventListener("click", () => box.classList.toggle("aberto"));
+
+  const dados = obterDadosStorage();
+
+  box.querySelectorAll(".remover-item").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const indexItem = Number(btn.dataset.index);
+      dados[indexDado].historico.splice(indexItem, 1);
+      salvarDados(dados);
+      renderizar(dados);
+    });
+  });
+
+  box.querySelectorAll(".editar-item").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const indexItem = Number(btn.dataset.index);
+      const item = dados[indexDado].historico[indexItem];
+
+      const novaDescricao = prompt("Editar descrição:", item.descricao);
+      if (novaDescricao === null) return; // usuário cancelou
+
+      const novoValor = prompt("Editar valor:", item.valor);
+      if (novoValor === null) return; // usuário cancelou
+
+      dados[indexDado].historico[indexItem] = { descricao: novaDescricao, valor: novoValor };
+      salvarDados(dados);
+      renderizar(dados);
+    });
   });
 
   return box;
 }
+
+
 
 function criarBoxValorAtual(dados) {
   const entradas = (dados.find(d => d.tipo === "inicial")?.historico || []);
@@ -138,6 +179,7 @@ function criarBoxValorAtual(dados) {
 }
 
 let grafico;
+
 function atualizarGrafico(dados) {
   const entradas = dados.find(d => d.tipo === "inicial")?.historico || [];
   const retiradas = dados.find(d => d.tipo === "retirado")?.historico || [];
@@ -146,32 +188,79 @@ function atualizarGrafico(dados) {
   if (!totalInicial) return;
 
   const percentual = Math.min(Math.round((totalAtual / totalInicial) * 100), 100);
-  const cor = totalAtual / totalInicial < 0.5 ? "#e74c3c" : "#2ecc71";
-  const status = totalAtual / totalInicial < 0.5 ? "Crítico" : "Saudável";
+
+  let cor, frase;
+  if (percentual <= 30) {
+    cor = "#e74c3c";
+    frase = "Atenção! Estoque baixo!";
+  } else if (percentual <= 60) {
+    cor = "#f1c40f";
+    frase = "Em andamento, mantenha o controle!";
+  } else {
+    cor = "#2ecc71";
+    frase = "Tudo saudável, ótimo trabalho!";
+  }
 
   const options = {
-    chart: { type: "radialBar", height: 280, sparkline: { enabled: true } },
+    chart: { 
+      type: "radialBar", 
+      height: 300, 
+      sparkline: { enabled: true },
+      animations: { enabled: true, easing: 'easeinout', speed: 1000 }
+    },
     series: [percentual],
     colors: [cor],
     plotOptions: {
       radialBar: {
         startAngle: -90,
         endAngle: 90,
-        hollow: { size: "65%" },
+        hollow: { size: "60%" },
         track: { background: "#2c2c2c" },
-        dataLabels: { value: { formatter: () => formatarMoeda(totalAtual), color: "#fff", fontSize: "18px" } }
+        dataLabels: {
+          name: { show: false },
+          value: { 
+            formatter: () => formatarMoeda(totalAtual), 
+            color: "#fff", 
+            fontSize: "22px", 
+            fontWeight: "bold"
+          },
+          total: {
+            show: true,
+            label: frase,
+            color: cor,
+            fontSize: "16px",
+            fontWeight: 500
+          }
+        }
       }
     },
-    subtitle: { text: status, align: "center", style: { color: cor } }
+    stroke: {
+      lineCap: 'round'
+    },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        type: 'horizontal',
+        gradientToColors: ['#2ecc71'],
+        stops: [0, 100]
+      }
+    },
+    subtitle: {
+      text: frase,
+      align: "center",
+      style: { color: cor, fontSize: '14px', fontWeight: 'bold' }
+    }
   };
 
   if (!grafico) {
     grafico = new ApexCharts(document.querySelector("#graficoFinanceiro"), options);
     grafico.render();
   } else {
-    grafico.updateOptions(options);
+    grafico.updateOptions(options, true); 
   }
 }
+
 
 function renderizar(dados) {
   const container = document.getElementById("valorContainer");
