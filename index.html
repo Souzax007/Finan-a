@@ -10,6 +10,7 @@
 </head>
 <body>
 
+  <!-- MENU -->
   <div class="container-menu">
     <div id="menu">
       <div id="menu-bar" onclick="menuOnClick(event)">
@@ -20,32 +21,22 @@
 
       <nav class="nav" id="nav">
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Blog</a></li>
-
-            <li>
-              <button type="button" onclick="exportarJSON()">
-                <i class="bi bi-download"></i> Exportar
-              </button>
-            </li>
-
-            <li>
-              <input 
-                type="file" 
-                id="importarJSON" 
-                accept=".json" 
-                hidden 
-                onchange="importarJSON(event)"
-              >
-              <button type="button" onclick="document.getElementById('importarJSON').click()">
-                Importar dados
-              </button>
-            </li>
-          </ul>
-
-   
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Blog</a></li>
+          <li>
+            <button type="button" onclick="exportarJSON()">
+              <i class="bi bi-download"></i> Exportar
+            </button>
+          </li>
+          <li>
+            <input type="file" id="importarJSON" accept=".json" hidden onchange="importarJSON(event)">
+            <button type="button" onclick="document.getElementById('importarJSON').click()">
+              Importar dados
+            </button>
+          </li>
+        </ul>
       </nav>
     </div>
 
@@ -81,8 +72,8 @@
         <option value="retirado">Retirado</option>
       </select>
 
-      <label for="titulo">Título:</label>
-      <input type="text" id="titulo" required>
+      <label for="descricao">Descrição:</label>
+      <input type="text" id="descricao" required placeholder="Ex: Salário, Venda, etc.">
 
       <label for="valor">Valor:</label>
       <input type="text" id="valor" required placeholder="R$ 0,00">
@@ -92,63 +83,8 @@
     </form>
   </div>
 
-
-
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="registrar.js"></script>
   <script src="script.js"></script>
-
-<script>
-function exportarJSON() {
-  const dados = localStorage.getItem('dadosFinanceiros');
-
-  if (!dados) {
-    alert('Nenhum dado para exportar.');
-    return;
-  }
-
-  const blob = new Blob([dados], { type: 'application/json;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'dados-financeiros.json';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  URL.revokeObjectURL(url);
-}
-
-function importarJSON(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    try {
-      const dados = JSON.parse(e.target.result);
-      localStorage.setItem('dadosFinanceiros', JSON.stringify(dados));
-      alert('Dados importados com sucesso!');
-      location.reload();
-    } catch (err) {
-      alert('Arquivo inválido. Selecione um JSON válido.');
-    }
-  };
-
-  reader.readAsText(file);
-}
-
-document.addEventListener("click", function (e) {
-  const nav = document.getElementById("nav");
-  const menu = document.getElementById("menu");
-
-  if (!menu.contains(e.target)) {
-    nav.classList.remove("active");
-  }
-});
-
-</script>
 
 </body>
 </html>

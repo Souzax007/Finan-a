@@ -14,6 +14,9 @@ html, body {
     height: 70px;
     border-radius: 50px;
 }
+.container{
+  flex-direction: column;
+}
 .pesquisa {
     margin-top: 18px;
     margin-left: 57px;
