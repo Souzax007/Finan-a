@@ -335,7 +335,6 @@
 
         /* Cards de transação para mobile */
         .transaction-card {
-            display: none;
             background: var(--bg-secondary);
             padding: 15px;
             border-radius: 10px;
@@ -362,6 +361,9 @@
             font-weight: bold;
             color: var(--text-primary);
             font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .transaction-card-amount {
@@ -629,6 +631,80 @@
             margin-bottom: 30px;
         }
 
+        .investment-item {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--investment-color);
+        }
+
+        .investment-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .investment-item .details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .health-indicator-container {
+            background: var(--bg-primary);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px var(--shadow);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .health-indicator-container h3 {
+            color: var(--text-primary);
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .health-indicator-container canvas {
+            max-width: 100%;
+            width: 100%;
+            height: auto !important;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .health-status {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .health-status i {
+            font-size: 28px;
+        }
+
+        .health-status.bad {
+            color: var(--expense-color);
+        }
+
+        .health-status.warning {
+            color: var(--investment-color);
+        }
+
+        .health-status.good {
+            color: var(--income-color);
+        }
+
+        /* Media Queries - Mobile */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -756,20 +832,6 @@
                 display: block !important;
             }
 
-            table {
-                font-size: 12px;
-            }
-
-            table th,
-            table td {
-                padding: 8px 5px;
-            }
-
-            .transactions-table {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
             .modal-content {
                 padding: 20px;
                 width: 95%;
@@ -855,10 +917,6 @@
                 font-size: 9px;
             }
 
-            table {
-                font-size: 11px;
-            }
-
             .btn-delete, .btn-edit {
                 padding: 4px 8px;
                 font-size: 11px;
@@ -872,79 +930,6 @@
             .period-selector select {
                 width: 100%;
             }
-        }
-
-        .investment-item {
-            background: var(--bg-secondary);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid var(--investment-color);
-        }
-
-        .investment-item h4 {
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-
-        .investment-item .details {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .health-indicator-container {
-            background: var(--bg-primary);
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px var(--shadow);
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .health-indicator-container h3 {
-            color: var(--text-primary);
-            font-size: 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .health-indicator-container canvas {
-            max-width: 100%;
-            width: 100%;
-            height: auto !important;
-            margin: 0 auto;
-            display: block;
-        }
-
-        .health-status {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .health-status i {
-            font-size: 28px;
-        }
-
-        .health-status.bad {
-            color: var(--expense-color);
-        }
-
-        .health-status.warning {
-            color: var(--investment-color);
-        }
-
-        .health-status.good {
-            color: var(--income-color);
         }
     </style>
 </head>
@@ -1465,12 +1450,35 @@
                 `;
                 cardsContainer.appendChild(card);
             });
+
+            // Mostrar mensagem se não houver transações
+            if (sortedTransactions.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.cssText = 'text-align: center; padding: 40px 20px; color: var(--text-secondary);';
+                emptyMessage.innerHTML = `
+                    <i class="bi bi-inbox" style="font-size: 48px; display: block; margin-bottom: 10px;"></i>
+                    <p style="font-size: 16px;">Nenhuma transação encontrada</p>
+                    <p style="font-size: 14px; margin-top: 5px;">Adicione uma nova transação para começar</p>
+                `;
+                cardsContainer.appendChild(emptyMessage);
+            }
         }
 
         // Atualizar lista de investimentos
         function updateInvestmentsList() {
             const container = document.getElementById('investmentsList');
             container.innerHTML = '';
+
+            if (financialData.investments.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+                        <i class="bi bi-graph-up" style="font-size: 48px; display: block; margin-bottom: 10px;"></i>
+                        <p style="font-size: 16px;">Nenhum investimento cadastrado</p>
+                        <p style="font-size: 14px; margin-top: 5px;">Adicione um investimento para acompanhar seu patrimônio</p>
+                    </div>
+                `;
+                return;
+            }
 
             financialData.investments.forEach(inv => {
                 const profit = inv.currentAmount - inv.initialAmount;
@@ -1480,7 +1488,7 @@
                 div.className = 'investment-item';
                 div.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
+                        <div style="flex: 1;">
                             <h4>${inv.name}</h4>
                             <div class="details">
                                 <span>Tipo: ${inv.type}</span>
@@ -1684,10 +1692,14 @@
 
         // Trocar tabs
         function switchTab(tabName) {
+            // Remove active de todas as tabs
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             
+            // Adiciona active na tab clicada
             event.target.classList.add('active');
+            
+            // Adiciona active no conteúdo correspondente
             document.getElementById(tabName + 'Tab').classList.add('active');
         }
 
@@ -1863,7 +1875,6 @@
             });
         }
 
-        // Formatear currency
         // Funções auxiliares
         function formatCurrency(value) {
             return new Intl.NumberFormat('pt-BR', {
