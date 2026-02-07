@@ -333,7 +333,6 @@
             border-radius: 3px;
         }
 
-        /* Cards de transação para mobile */
         .transaction-card {
             background: var(--bg-secondary);
             padding: 15px;
@@ -405,7 +404,6 @@
             max-width: 120px;
         }
 
-        /* Mostrar/ocultar elementos por dispositivo */
         .desktop-only {
             display: block;
         }
@@ -704,7 +702,6 @@
             color: var(--income-color);
         }
 
-        /* Media Queries - Mobile */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -823,7 +820,6 @@
                 font-size: 14px;
             }
 
-            /* Ocultar tabela e mostrar cards no mobile */
             .desktop-only {
                 display: none !important;
             }
@@ -980,7 +976,6 @@
                 </div>
             </div>
 
-            <!-- Indicador de Saúde Financeira -->
             <div class="health-indicator-container">
                 <h3><i class="bi bi-heart-pulse"></i> Saúde Financeira</h3>
                 <canvas id="healthGauge"></canvas>
@@ -1014,7 +1009,6 @@
                 <div class="section">
                     <h2>Histórico de Transações</h2>
                     
-                    <!-- Tabela para desktop -->
                     <div class="transactions-table desktop-only">
                         <table>
                             <thead>
@@ -1032,7 +1026,6 @@
                         </table>
                     </div>
 
-                    <!-- Cards para mobile -->
                     <div id="transactionsCards" class="mobile-only"></div>
                 </div>
             </div>
@@ -1046,7 +1039,6 @@
         </div>
     </div>
 
-    <!-- Modal para Nova Transação -->
     <div id="transactionModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1097,7 +1089,6 @@
         </div>
     </div>
 
-    <!-- Modal para Investimento -->
     <div id="investmentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1141,30 +1132,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Dados da aplicação
         let financialData = {
             transactions: [],
             investments: []
         };
 
-        // Variável para controlar edição
         let editingTransactionId = null;
         let editingInvestmentId = null;
 
-        // Carregar dados do localStorage
         function loadData() {
             const savedData = localStorage.getItem('financialData');
             if (savedData) {
                 financialData = JSON.parse(savedData);
             }
             
-            // Carregar tema salvo
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeIcon(savedTheme);
         }
 
-        // Toggle tema
         function toggleTheme() {
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1173,7 +1159,6 @@
             updateThemeIcon(newTheme);
         }
 
-        // Atualizar ícone do tema
         function updateThemeIcon(theme) {
             const themeToggle = document.getElementById('themeToggle');
             if (theme === 'dark') {
@@ -1183,12 +1168,10 @@
             }
         }
 
-        // Salvar dados no localStorage
         function saveData() {
             localStorage.setItem('financialData', JSON.stringify(financialData));
         }
 
-        // Inicializar aplicação
         function init() {
             loadData();
             populateDateSelectors();
@@ -1196,14 +1179,12 @@
             setDefaultDate();
         }
 
-        // Definir data padrão como hoje
         function setDefaultDate() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('transactionDate').value = today;
             document.getElementById('investmentDate').value = today;
         }
 
-        // Popular seletores de data
         function populateDateSelectors() {
             const monthSelect = document.getElementById('monthSelect');
             const yearSelect = document.getElementById('yearSelect');
@@ -1230,7 +1211,6 @@
             }
         }
 
-        // Adicionar ou editar transação
         function addTransaction(event) {
             event.preventDefault();
             
@@ -1244,14 +1224,12 @@
             };
 
             if (editingTransactionId) {
-                // Editar transação existente
                 const index = financialData.transactions.findIndex(t => t.id === editingTransactionId);
                 if (index !== -1) {
                     financialData.transactions[index] = transaction;
                 }
                 editingTransactionId = null;
             } else {
-                // Adicionar nova transação
                 financialData.transactions.push(transaction);
             }
 
@@ -1262,7 +1240,6 @@
             setDefaultDate();
         }
 
-        // Adicionar ou editar investimento
         function addInvestment(event) {
             event.preventDefault();
             
@@ -1276,14 +1253,12 @@
             };
 
             if (editingInvestmentId) {
-                // Editar investimento existente
                 const index = financialData.investments.findIndex(i => i.id === editingInvestmentId);
                 if (index !== -1) {
                     financialData.investments[index] = investment;
                 }
                 editingInvestmentId = null;
             } else {
-                // Adicionar novo investimento
                 financialData.investments.push(investment);
             }
 
@@ -1294,7 +1269,6 @@
             setDefaultDate();
         }
 
-        // Deletar transação
         function deleteTransaction(id) {
             if (confirm('Deseja realmente excluir esta transação?')) {
                 financialData.transactions = financialData.transactions.filter(t => t.id !== id);
@@ -1303,7 +1277,6 @@
             }
         }
 
-        // Editar transação
         function editTransaction(id) {
             const transaction = financialData.transactions.find(t => t.id === id);
             if (!transaction) return;
@@ -1320,7 +1293,6 @@
             openModal();
         }
 
-        // Deletar investimento
         function deleteInvestment(id) {
             if (confirm('Deseja realmente excluir este investimento?')) {
                 financialData.investments = financialData.investments.filter(i => i.id !== id);
@@ -1329,7 +1301,6 @@
             }
         }
 
-        // Editar investimento
         function editInvestment(id) {
             const investment = financialData.investments.find(i => i.id === id);
             if (!investment) return;
@@ -1346,7 +1317,6 @@
             openInvestmentModal();
         }
 
-        // Filtrar transações
         function filterTransactions() {
             const month = document.getElementById('monthSelect').value;
             const year = document.getElementById('yearSelect').value;
@@ -1359,9 +1329,33 @@
             });
         }
 
-        // Atualizar dashboard
+        // NOVA LÓGICA: Calcular saldo acumulado até determinado mês
+        function calculateAccumulatedBalance(upToMonth, upToYear) {
+            let accumulated = 0;
+            
+            financialData.transactions.forEach(t => {
+                const date = new Date(t.date);
+                const transactionYear = date.getFullYear();
+                const transactionMonth = date.getMonth() + 1;
+                
+                // Verificar se a transação é anterior ou igual ao mês/ano especificado
+                if (transactionYear < upToYear || 
+                    (transactionYear === upToYear && transactionMonth <= upToMonth)) {
+                    if (t.type === 'income') {
+                        accumulated += t.amount;
+                    } else {
+                        accumulated -= t.amount;
+                    }
+                }
+            });
+            
+            return accumulated;
+        }
+
         function updateDashboard() {
             const filteredTransactions = filterTransactions();
+            const selectedMonth = document.getElementById('monthSelect').value;
+            const selectedYear = document.getElementById('yearSelect').value;
             
             const totalIncome = filteredTransactions
                 .filter(t => t.type === 'income')
@@ -1374,7 +1368,15 @@
             const totalInvestment = financialData.investments
                 .reduce((sum, i) => sum + i.currentAmount, 0);
             
-            const balance = totalIncome - totalExpense;
+            // NOVA LÓGICA: Usar saldo acumulado quando houver filtro de período
+            let balance;
+            if (selectedMonth && selectedYear) {
+                balance = calculateAccumulatedBalance(parseInt(selectedMonth), parseInt(selectedYear));
+            } else if (selectedYear) {
+                balance = calculateAccumulatedBalance(12, parseInt(selectedYear));
+            } else {
+                balance = totalIncome - totalExpense;
+            }
 
             document.getElementById('totalIncome').textContent = formatCurrency(totalIncome);
             document.getElementById('totalExpense').textContent = formatCurrency(totalExpense);
@@ -1386,7 +1388,6 @@
             updateCharts(filteredTransactions);
         }
 
-        // Atualizar tabela de transações
         function updateTransactionsTable(transactions) {
             const tbody = document.getElementById('transactionsBody');
             const cardsContainer = document.getElementById('transactionsCards');
@@ -1396,7 +1397,6 @@
             const sortedTransactions = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             sortedTransactions.forEach(t => {
-                // Criar linha da tabela (desktop)
                 const row = document.createElement('tr');
                 row.className = t.type === 'income' ? 'income-row' : 'expense-row';
                 row.innerHTML = `
@@ -1414,7 +1414,6 @@
                 `;
                 tbody.appendChild(row);
 
-                // Criar card (mobile)
                 const card = document.createElement('div');
                 card.className = 'transaction-card';
                 card.style.borderLeft = `4px solid ${t.type === 'income' ? 'var(--income-color)' : 'var(--expense-color)'}`;
@@ -1451,7 +1450,6 @@
                 cardsContainer.appendChild(card);
             });
 
-            // Mostrar mensagem se não houver transações
             if (sortedTransactions.length === 0) {
                 const emptyMessage = document.createElement('div');
                 emptyMessage.style.cssText = 'text-align: center; padding: 40px 20px; color: var(--text-secondary);';
@@ -1464,7 +1462,6 @@
             }
         }
 
-        // Atualizar lista de investimentos
         function updateInvestmentsList() {
             const container = document.getElementById('investmentsList');
             container.innerHTML = '';
@@ -1512,7 +1509,6 @@
             });
         }
 
-        // Atualizar gráficos
         let monthlyChart, categoryChart, yearlyChart, healthGauge;
 
         function updateCharts(transactions) {
@@ -1522,11 +1518,15 @@
             updateHealthGauge(transactions);
         }
 
+        // NOVA LÓGICA: Atualizar gráfico mensal com saldo acumulado
         function updateMonthlyChart(transactions) {
             const ctx = document.getElementById('monthlyChart').getContext('2d');
             
             const monthlyData = {};
-            transactions.forEach(t => {
+            const accumulatedBalance = {};
+            
+            // Agrupar transações por mês
+            financialData.transactions.forEach(t => {
                 const date = new Date(t.date);
                 const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
                 if (!monthlyData[key]) {
@@ -1542,6 +1542,14 @@
             const labels = Object.keys(monthlyData).sort();
             const incomeData = labels.map(l => monthlyData[l].income);
             const expenseData = labels.map(l => monthlyData[l].expense);
+            
+            // Calcular saldo acumulado mês a mês
+            const balanceData = [];
+            let runningBalance = 0;
+            labels.forEach(label => {
+                runningBalance += (monthlyData[label].income - monthlyData[label].expense);
+                balanceData.push(runningBalance);
+            });
 
             if (monthlyChart) monthlyChart.destroy();
             
@@ -1555,11 +1563,22 @@
                     datasets: [{
                         label: 'Ganhos',
                         data: incomeData,
-                        backgroundColor: '#10b981'
+                        backgroundColor: '#10b981',
+                        type: 'bar'
                     }, {
                         label: 'Gastos',
                         data: expenseData,
-                        backgroundColor: '#ef4444'
+                        backgroundColor: '#ef4444',
+                        type: 'bar'
+                    }, {
+                        label: 'Saldo Acumulado',
+                        data: balanceData,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        type: 'line',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 3
                     }]
                 },
                 options: {
@@ -1667,7 +1686,6 @@
             });
         }
 
-        // Funções de modal
         function openModal() {
             editingTransactionId = null;
             document.querySelector('#transactionModal .modal-header h2').textContent = 'Nova Transação';
@@ -1690,20 +1708,15 @@
             document.getElementById('investmentModal').classList.remove('active');
         }
 
-        // Trocar tabs
         function switchTab(tabName) {
-            // Remove active de todas as tabs
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             
-            // Adiciona active na tab clicada
             event.target.classList.add('active');
             
-            // Adiciona active no conteúdo correspondente
             document.getElementById(tabName + 'Tab').classList.add('active');
         }
 
-        // Exportar dados
         function exportData() {
             const dataStr = JSON.stringify(financialData, null, 2);
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
@@ -1716,7 +1729,6 @@
             alert('Dados exportados com sucesso!');
         }
 
-        // Importar dados
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1738,7 +1750,6 @@
             reader.readAsText(file);
         }
 
-        // Atualizar gráfico de saúde financeira
         function updateHealthGauge(transactions) {
             const totalIncome = transactions
                 .filter(t => t.type === 'income')
@@ -1748,7 +1759,6 @@
                 .filter(t => t.type === 'expense')
                 .reduce((sum, t) => sum + t.amount, 0);
             
-            // Calcular score de saúde (0-100)
             let healthScore = 0;
             let status = 'bad';
             let statusText = 'Crítico';
@@ -1757,29 +1767,24 @@
             if (totalIncome === 0) {
                 healthScore = 0;
             } else {
-                // Percentual de gastos em relação aos ganhos
                 const expenseRatio = (totalExpense / totalIncome) * 100;
                 
                 if (expenseRatio <= 50) {
-                    // Excelente: gastando até 50%
                     healthScore = 100 - (expenseRatio * 0.4);
                     status = 'good';
                     statusText = 'Excelente';
                     statusIcon = 'bi-emoji-smile';
                 } else if (expenseRatio <= 80) {
-                    // Moderado: gastando entre 50-80%
                     healthScore = 80 - ((expenseRatio - 50) * 1.5);
                     status = 'warning';
                     statusText = 'Atenção';
                     statusIcon = 'bi-emoji-neutral';
                 } else if (expenseRatio <= 100) {
-                    // Ruim: gastando entre 80-100%
                     healthScore = 35 - ((expenseRatio - 80) * 1);
                     status = 'bad';
                     statusText = 'Cuidado';
                     statusIcon = 'bi-emoji-frown';
                 } else {
-                    // Crítico: gastando mais que ganha
                     healthScore = Math.max(0, 15 - ((expenseRatio - 100) * 0.3));
                     status = 'bad';
                     statusText = 'Crítico';
@@ -1787,7 +1792,6 @@
                 }
             }
             
-            // Atualizar status text
             const statusElement = document.getElementById('healthStatus');
             statusElement.className = `health-status ${status}`;
             statusElement.innerHTML = `<i class="bi ${statusIcon}"></i> ${statusText}`;
@@ -1796,7 +1800,6 @@
             
             if (healthGauge) healthGauge.destroy();
             
-            // Criar gráfico de gauge usando doughnut
             healthGauge = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
@@ -1834,7 +1837,6 @@
                         const angle = (healthScore / 100) * Math.PI - Math.PI;
                         const radius = Math.min(width, height * 2) * 0.35;
                         
-                        // Desenhar ponteiro
                         ctx.save();
                         ctx.translate(centerX, centerY);
                         ctx.rotate(angle);
@@ -1846,7 +1848,6 @@
                         ctx.fill();
                         ctx.restore();
                         
-                        // Desenhar círculo central
                         ctx.beginPath();
                         ctx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
                         ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-primary').trim();
@@ -1855,7 +1856,6 @@
                         ctx.lineWidth = 2;
                         ctx.stroke();
                         
-                        // Desenhar labels
                         ctx.font = 'bold 14px sans-serif';
                         ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim();
                         ctx.textAlign = 'left';
@@ -1865,7 +1865,6 @@
                         ctx.textAlign = 'right';
                         ctx.fillText('100', width - 20, centerY - 5);
                         
-                        // Desenhar score no centro
                         ctx.font = 'bold 32px sans-serif';
                         ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
                         ctx.textAlign = 'center';
@@ -1875,7 +1874,6 @@
             });
         }
 
-        // Funções auxiliares
         function formatCurrency(value) {
             return new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
@@ -1888,7 +1886,6 @@
             return date.toLocaleDateString('pt-BR');
         }
 
-        // Inicializar ao carregar a página
         window.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
